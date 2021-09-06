@@ -14,7 +14,7 @@ class Book
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -25,7 +25,7 @@ class Book
     private $Name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="books")
+     * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="Books")
      */
     private $Author;
 

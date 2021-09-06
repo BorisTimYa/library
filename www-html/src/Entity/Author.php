@@ -14,7 +14,7 @@ class Author
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -27,11 +27,11 @@ class Author
     /**
      * @ORM\ManyToMany(targetEntity=Book::class, mappedBy="Author")
      */
-    private $books;
+    private $Books;
 
     public function __construct()
     {
-        $this->books = new ArrayCollection();
+        $this->Books = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,13 +56,13 @@ class Author
      */
     public function getBooks(): Collection
     {
-        return $this->books;
+        return $this->Books;
     }
 
     public function addBook(Book $book): self
     {
-        if (!$this->books->contains($book)) {
-            $this->books[] = $book;
+        if (!$this->Books->contains($book)) {
+            $this->Books[] = $book;
             $book->addAuthor($this);
         }
 
@@ -71,7 +71,7 @@ class Author
 
     public function removeBook(Book $book): self
     {
-        if ($this->books->removeElement($book)) {
+        if ($this->Books->removeElement($book)) {
             $book->removeAuthor($this);
         }
 
