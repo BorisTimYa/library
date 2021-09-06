@@ -25,7 +25,7 @@ class Author
     private $Name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Book::class, mappedBy="Author")
+     * @ORM\ManyToMany(targetEntity=Book::class, mappedBy="Author")
      */
     private $books;
 
@@ -63,7 +63,7 @@ class Author
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
-            $book->setAuthor($this);
+            $book->addAuthor($this);
         }
 
         return $this;
@@ -72,10 +72,7 @@ class Author
     public function removeBook(Book $book): self
     {
         if ($this->books->removeElement($book)) {
-            // set the owning side to null (unless already changed)
-            if ($book->getAuthor() === $this) {
-                $book->setAuthor(null);
-            }
+            $book->removeAuthor($this);
         }
 
         return $this;
