@@ -6,12 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthorControllerTest extends WebTestCase
 {
-    public function testIndexPage(): void
+
+    public function testCreateAuthor(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', 'http://192.168.8.100:8888/ru/book/1');
-
+        $client->request('PUT', 'http://192.168.8.100:8888/author/create', [], [], [], '{"name":"Test Author"}');
         $this->assertResponseIsSuccessful();
-//        $this->assertSelectorTextContains('small', 'Welcome to');
+        $response = json_decode($client->getResponse()->getContent());
+        $this->assertIsObject($response);
+        $this->assertObjectHasAttribute('id', $response);
     }
+
 }
