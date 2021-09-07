@@ -1,9 +1,9 @@
 1. `git clone https://github.com/BorisTimYa/liliya.git` 
 2. `docker-compose up --no-start`
 3. `docker-compose start`
-4. Fetch vendor: `docker-compose exec app php composer.phar install`   
-5. Migrate and create demo data: `docker-compose exec app bin/console doctrine:migration:migrate --no-interaction`
-6. Running tests: `docker-compose exec app bin/phpunit`
+4. `docker-compose exec app php composer.phar install`   
+5. `docker-compose exec app bin/console doctrine:migration:migrate --no-interaction`
+6. `docker-compose exec app bin/phpunit`
 -------------------
 USAGE:
 Author:
