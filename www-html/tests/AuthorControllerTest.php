@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthorControllerTest extends WebTestCase
@@ -9,7 +10,7 @@ class AuthorControllerTest extends WebTestCase
     public function testCreateAuthor(): void
     {
         $client = static::createClient();
-        $content = new \stdClass();
+        $content = new stdClass();
         $content->name = "First Test Author";
         $client->request('PUT', '/author/create', [], [], [], json_encode($content));
         $this->assertResponseIsSuccessful();

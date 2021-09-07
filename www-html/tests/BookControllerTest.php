@@ -3,7 +3,6 @@
 namespace App\Tests;
 
 use stdClass;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BookControllerTest extends WebTestCase
