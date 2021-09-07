@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Author
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -77,4 +78,5 @@ class Author
 
         return $this;
     }
+
 }

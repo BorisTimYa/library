@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Book
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -39,9 +40,9 @@ class Book
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(int $langId = 0): ?string
     {
-        return $this->Name;
+        return explode('|', $this->Name)[$langId ?: 0];
     }
 
     public function setName(string $Name): self
@@ -74,4 +75,5 @@ class Book
 
         return $this;
     }
+
 }

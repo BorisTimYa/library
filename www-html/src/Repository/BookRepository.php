@@ -14,37 +14,28 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BookRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
     }
 
-    // /**
-    //  * @return Book[] Returns an array of Book objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Book
+    /**
+     * @param string $name
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function findByNameLike(string $name, int $limit): array
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+          ->addSelect('u')
+          ->leftJoin('b.Author', 'u')
+          ->andWhere('b.Name LIKE :name')
+          ->setParameter('name', $name)
+          ->setMaxResults($limit)
+          ->getQuery()
+          ->getArrayResult();
     }
-    */
 }
