@@ -42,7 +42,8 @@ class Book
 
     public function getName(int $langId = 0): ?string
     {
-        return explode('|', $this->Name)[$langId ?: 0];
+        $translations = explode('|', $this->Name);
+        return $translations[$langId] ?? $translations[0];
     }
 
     public function setName(string $Name): self
