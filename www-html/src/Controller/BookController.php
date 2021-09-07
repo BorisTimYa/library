@@ -94,8 +94,7 @@ class BookController extends AbstractController
         }
 
         return new JsonResponse(
-          ['message' => 'No required fields', "request" => $request->getContent()],
-          Response::HTTP_NOT_ACCEPTABLE
+          ['message' => 'No required fields', "request" => $request->getContent()], Response::HTTP_NOT_ACCEPTABLE
         );
     }
 
@@ -122,7 +121,7 @@ class BookController extends AbstractController
             }
             $searchExpression = implode('|', $locales);
 
-            $books = $bookRepository->findByNameLike($searchExpression, self::SEARCH_LIMIT);
+            $books = $bookRepository->findByNameLike($searchExpression, $this->getParameter('app.search_items_limit'));
         }
 
         return new JsonResponse($books);
