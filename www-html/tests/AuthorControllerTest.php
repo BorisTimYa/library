@@ -9,7 +9,7 @@ class AuthorControllerTest extends WebTestCase
     public function testIndexPage(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', 'http://localhost:8888/ru/book/1');
+        $crawler = $client->request('GET', 'http://192.168.8.100:8888/ru/book/1');
 
         $this->assertResponseIsSuccessful();
 //        $this->assertSelectorTextContains('small', 'Welcome to');
