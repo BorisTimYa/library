@@ -39,10 +39,10 @@ class BookController extends AbstractController
             $langId = array_search($locale, $locales);
             $authors = [];
             foreach ($book->getAuthor() as $author) {
-                $authors[] = ['Name' => $author->getName()];
+                $authors[] = ['id' => $author->getId(), 'Name' => $author->getName()];
             }
 
-            return new JsonResponse(['Name' => $book->getName($langId), 'Author' => $authors]);
+            return new JsonResponse(['id' => $book->getId(), 'Name' => $book->getName($langId), 'Author' => $authors]);
         }
 
         return new JsonResponse(['message' => 'Not found'], Response::HTTP_NOT_FOUND);
@@ -93,7 +93,10 @@ class BookController extends AbstractController
             return new JsonResponse(['id' => $book->getId(),]);
         }
 
-        return new JsonResponse(['message' => 'No required fields'], Response::HTTP_NOT_ACCEPTABLE);
+        return new JsonResponse(
+          ['message' => 'No required fields', "request" => $request->getContent()],
+          Response::HTTP_NOT_ACCEPTABLE
+        );
     }
 
     /**
@@ -106,6 +109,7 @@ class BookController extends AbstractController
 
     public function search(Request $request, BookRepository $bookRepository): Response
     {
+        $books = [];
         if ($search = $request->getContent()) {
             $locale = $request->getLocale();
             $locales = explode('|', $this->getParameter('app.supported_locales'));
@@ -116,13 +120,12 @@ class BookController extends AbstractController
                     $loc = '%';
                 }
             }
-            $search = implode('|', $locales);
-            if (($books = $bookRepository->findByNameLike($search, self::SEARCH_LIMIT))) {
-                return new JsonResponse($books);
-            }
+            $searchExpression = implode('|', $locales);
+
+            $books = $bookRepository->findByNameLike($searchExpression, self::SEARCH_LIMIT);
         }
 
-        return new JsonResponse([], Response::HTTP_NOT_FOUND);
+        return new JsonResponse($books);
     }
 
 }

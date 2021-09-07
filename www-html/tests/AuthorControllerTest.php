@@ -6,15 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthorControllerTest extends WebTestCase
 {
-
     public function testCreateAuthor(): void
     {
         $client = static::createClient();
-        $client->request('PUT', 'http://192.168.8.100:8888/author/create', [], [], [], '{"name":"Test Author"}');
+        $content = new \stdClass();
+        $content->name = "First Test Author";
+        $client->request('PUT', '/author/create', [], [], [], json_encode($content));
         $this->assertResponseIsSuccessful();
         $response = json_decode($client->getResponse()->getContent());
         $this->assertIsObject($response);
         $this->assertObjectHasAttribute('id', $response);
     }
-
 }

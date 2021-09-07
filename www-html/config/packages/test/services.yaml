@@ -1,0 +1,2 @@
+parameters:
+  test.host_address: '%env(resolve:TEST_HOST_ADDRESS)%'
