@@ -1,4 +1,4 @@
-1. `git clone` 
+1. `git clone https://github.com/BorisTimYa/liliya.git` 
 2. `docker-compose up --no-start`
 3. `docker-compose start`
 4. `docker-compose exec app php composer.phar install`   
