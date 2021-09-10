@@ -20,13 +20,19 @@ class BookControllerTest extends WebTestCase
     public function titleProvider(): Iterator
     {
         $rand = date('Y-m').'-'.gethostname();
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
+            $authors = [];
+            for ($ii = 1; $ii <= rand(1, 10); $ii++) {
+                $authors[] = sprintf("Author %s t#%s.%s book", $rand, $i, $ii);
+            }
             yield [
               sprintf("English title %s t#%s book", $rand, $i),
-              sprintf("Русское название %s t#%s книги", $rand, $i)
+              sprintf("Русское название %s t#%s книги", $rand, $i),
+              $authors,
             ];
         }
     }
+
 
     /**
      * @dataProvider titleProvider
@@ -36,12 +42,12 @@ class BookControllerTest extends WebTestCase
      *
      * @return int
      */
-    public function testCreateBook(string $nameEn, string $nameRu): void
+    public function testCreateBook(string $nameEn, string $nameRu, array $authorNames): void
     {
         $client = static::createClient();
         $content = new stdClass();
         $content->name = "$nameEn|$nameRu";
-        $content->author = ["First Test Author", "Second Test Author"];
+        $content->author = $authorNames;
         $client->request('POST', '/book/create', [], [], [], json_encode($content));
         $this->assertResponseIsSuccessful();
         $response = json_decode($client->getResponse()->getContent());
