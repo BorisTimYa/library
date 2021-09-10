@@ -2,12 +2,31 @@
 
 namespace App\Tests;
 
+use Iterator;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class BookControllerTest
+ *
+ * @package App\Tests
+ */
 class BookControllerTest extends WebTestCase
 {
 
+    /**
+     * @return Iterator
+     */
+    public function titleProvider(): Iterator
+    {
+        $rand = date('Y-m').'-'.gethostname();
+        for ($i = 1; $i <= 5; $i++) {
+            yield [
+              sprintf("English title %s t#%s book", $rand, $i),
+              sprintf("Русское название %s t#%s книги", $rand, $i)
+            ];
+        }
+    }
 
     /**
      * @dataProvider titleProvider
@@ -100,20 +119,6 @@ class BookControllerTest extends WebTestCase
         $this->assertObjectHasAttribute('Author', $book);
         $this->assertIsArray($book->Author);
         $this->assertStringContainsString($nameEn, $book->Name);
-    }
-
-    public function titleProvider(): array
-    {
-        $rand = date('Y-m').gethostname();
-        $ret = [];
-        for ($i = 0; $i < 3; $i++) {
-            $ret[] = [
-              sprintf("English title %s t#%s book", $rand, $i + 1),
-              sprintf("Русское название %s t#%s книги", $rand, $i + 1),
-            ];
-        }
-
-        return $ret;
     }
 
 }
