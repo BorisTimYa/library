@@ -1,11 +1,10 @@
 Task description: https://github.com/BorisTimYa/liliya/blob/e7e89f62a300cf5cde20ac983341b26040441f13/tz.pdf
 
 1. `git clone https://github.com/BorisTimYa/liliya.git` 
-2. `docker-compose up --no-start`
-3. `docker-compose start`
-4. `docker-compose exec app php composer.phar install`   
-5. `docker-compose exec app bin/console doctrine:migration:migrate --no-interaction`
-6. `docker-compose exec app bin/phpunit --verbose`
+2. `docker-compose up -d`
+3. `docker-compose exec app php composer.phar install`   
+4. `docker-compose exec app bin/console doctrine:migration:migrate --no-interaction`
+5. `docker-compose exec app bin/phpunit --verbose`
 -------------------
 USAGE:
    
