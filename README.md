@@ -23,3 +23,9 @@ Book:
     GET: `curl localhost:8888/ru/book/10001`
         {"Name":"Русское название","Author":[{"Name":"Main author "},{"Name":"Second author"}]}    
     
+
+-----
+ no REST  !???
+ no TESTS !!??
+ no Logic !!!?
+ no Inputs check !!!!

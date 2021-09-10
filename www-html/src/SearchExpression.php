@@ -16,6 +16,11 @@ class SearchExpression
         $this->param = $parameterBag;
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return string
+     */
     public function getExpression(Request $request): string
     {
         if ($search = $request->getContent()) {
@@ -33,6 +38,20 @@ class SearchExpression
         }
 
         return '';
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return int
+     */
+    public function getCurrentLangId(Request $request): int
+    {
+        $locale = $request->getLocale();
+        $locales = explode('|', $this->param->get('app.supported_locales'));
+        $langId = array_search($locale, $locales);
+
+        return $langId;
     }
 
 }

@@ -20,7 +20,7 @@ class AuthorController extends AbstractController
 {
 
     /**
-     * @Route("/author/create", name="author_create", methods={"PUT"})
+     * @Route("/author/create", name="author_create", methods={"POST"})
      */
     public function create(
       Request $request,

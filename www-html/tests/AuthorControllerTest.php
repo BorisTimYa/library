@@ -12,7 +12,7 @@ class AuthorControllerTest extends WebTestCase
         $client = static::createClient();
         $content = new stdClass();
         $content->name = "First Test Author";
-        $client->request('PUT', '/author/create', [], [], [], json_encode($content));
+        $client->request('POST', '/author/create', [], [], [], json_encode($content));
         $this->assertResponseIsSuccessful();
         $response = json_decode($client->getResponse()->getContent());
         $this->assertIsObject($response);

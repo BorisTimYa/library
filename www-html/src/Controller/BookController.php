@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Author;
 use App\Entity\Book;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
@@ -14,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use function mysql_xdevapi\expression;
-
 /**
  * Class BookController
  *
@@ -24,28 +21,20 @@ use function mysql_xdevapi\expression;
 class BookController extends AbstractController
 {
 
-    const SEARCH_LIMIT = 20;
 
     /**
      * @param int $id
      * @param \App\Repository\BookRepository $bookRepository
      * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\SearchExpression $searchExpression
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/{_locale<%app.supported_locales%>}/book/{id}", name="book", requirements={"id"="\d+"}, methods={"GET"})
      */
-    public function index(int $id, BookRepository $bookRepository, Request $request): Response
+    public function index(int $id, BookRepository $bookRepository, Request $request, SearchExpression $searchExpression): Response
     {
         if ($book = $bookRepository->find($id)) {
-            $locale = $request->getLocale();
-            $locales = explode('|', $this->getParameter('app.supported_locales'));
-            $langId = array_search($locale, $locales);
-            $authors = [];
-            foreach ($book->getAuthor() as $author) {
-                $authors[] = ['id' => $author->getId(), 'Name' => $author->getName()];
-            }
-
-            return new JsonResponse(['id' => $book->getId(), 'Name' => $book->getName($langId), 'Author' => $authors]);
+            return new JsonResponse(['id' => $book->getId(), 'Name' => $book->getName($searchExpression->getCurrentLangId($request)), 'Author' => $book->getAuthorArray()]);
         }
 
         return new JsonResponse(['message' => 'Not found'], Response::HTTP_NOT_FOUND);
@@ -70,35 +59,17 @@ class BookController extends AbstractController
             if (!$book = $bookRepository->findOneBy(['Name' => $json->name])) {
                 $book = new Book();
                 $book->setName($json->name);
-
                 if (property_exists($json, 'author') && is_array($json->author)) {
-                    foreach ($json->author as $authorValue) {
-                        if (is_numeric($authorValue)) {
-                            if ($author = $authorRepository->find($authorValue)) {
-                                $book->addAuthor($author);
-                            }
-                        } elseif ($author = $authorRepository->findOneBy(['Name' => $authorValue])) {
-                            $book->addAuthor($author);
-                        } else {
-                            $author = new Author();
-                            $author->setName($authorValue);
-                            $entityManager->persist($author);
-                            $entityManager->flush();
-                            $book->addAuthor($author);
-                        }
-                    }
+                    $book->searchAddAuthor($json->author, $authorRepository, $entityManager);
                 }
-
                 $entityManager->persist($book);
                 $entityManager->flush();
             }
 
-            return new JsonResponse(['id' => $book->getId(),]);
+            return new JsonResponse(['id' => $book->getId()]);
         }
 
-        return new JsonResponse(
-          ['message' => 'No required fields', "request" => $request->getContent()], Response::HTTP_NOT_ACCEPTABLE
-        );
+        return new JsonResponse(['message' => 'No required fields', "request" => $request->getContent()], Response::HTTP_NOT_ACCEPTABLE);
     }
 
     /**

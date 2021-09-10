@@ -78,5 +78,4 @@ class Author
 
         return $this;
     }
-
 }
