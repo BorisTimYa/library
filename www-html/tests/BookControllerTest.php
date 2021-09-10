@@ -15,7 +15,7 @@ class BookControllerTest extends WebTestCase
         $content->name = "English book title|Русское название книги";
         $content->author = ["First Test Author", "Second Test Author"];
 
-        $client->request('PUT', '/book/create', [], [], [], json_encode($content));
+        $client->request('POST', '/book/create', [], [], [], json_encode($content));
         $this->assertResponseIsSuccessful();
         $response = json_decode($client->getResponse()->getContent());
         $this->assertIsObject($response);

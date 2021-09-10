@@ -6,12 +6,15 @@ use App\Entity\Author;
 use App\Entity\Book;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
+use App\SearchExpression;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use function mysql_xdevapi\expression;
 
 /**
  * Class BookController
@@ -55,7 +58,7 @@ class BookController extends AbstractController
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/book/create", name="book_create", methods={"PUT"})
+     * @Route("/book/create", name="book_create", methods={"POST"})
      */
     public function create(
       Request $request,
@@ -101,27 +104,17 @@ class BookController extends AbstractController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \App\Repository\BookRepository $bookRepository
+     * @param \App\SearchExpression $searchExpression
      *
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/{_locale<%app.supported_locales%>}/book/search", name="book_search", methods={"SEARCH"})
      */
 
-    public function search(Request $request, BookRepository $bookRepository): Response
+    public function search(Request $request, BookRepository $bookRepository, SearchExpression $searchExpression): Response
     {
         $books = [];
-        if ($search = $request->getContent()) {
-            $locale = $request->getLocale();
-            $locales = explode('|', $this->getParameter('app.supported_locales'));
-            foreach ($locales as &$loc) {
-                if ($loc == $locale) {
-                    $loc = "%$search%";
-                } else {
-                    $loc = '%';
-                }
-            }
-            $searchExpression = implode('|', $locales);
-
-            $books = $bookRepository->findByNameLike($searchExpression, $this->getParameter('app.search_items_limit'));
+        if ($expression = $searchExpression->getExpression($request)) {
+            $books = $bookRepository->findByNameLike($expression, $this->getParameter('app.search_items_limit'));
         }
 
         return new JsonResponse($books);
