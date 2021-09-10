@@ -64,7 +64,6 @@ class BookControllerTest extends WebTestCase
      */
     public function testShowBookMultilingualRU(string $nameEn, string $nameRu): void
     {
-        var_export($nameEn);
         $client = static::createClient();
         $client->request('SEARCH', '/ru/book/search', [], [], [], $nameRu);
         $response = json_decode($client->getResponse()->getContent());
@@ -106,11 +105,14 @@ class BookControllerTest extends WebTestCase
     public function titleProvider(): array
     {
         $rand = date('Y-m').gethostname();
+        $ret = [];
+        for ($i = 0; $i < 3; $i++) {
+            $ret[] = [
+              sprintf("English title %s t#%s book", $rand, $i + 1),
+              sprintf("Русское название %s t#%s книги", $rand, $i + 1),
+            ];
+        }
 
-        $nameEn = "English book $rand title";
-        $nameRu = "Русское название $rand книги";
-
-        return [[$nameEn, $nameRu]];
+        return $ret;
     }
-
 }
