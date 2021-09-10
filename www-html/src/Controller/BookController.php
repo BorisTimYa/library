@@ -46,7 +46,7 @@ class BookController extends AbstractController
      * @param \App\Repository\AuthorRepository $authorRepository
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\  HttpFoundation\Response
      * @Route("/book/create", name="book_create", methods={"POST"})
      */
     public function create(
