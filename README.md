@@ -3,7 +3,7 @@
 3. `docker-compose start`
 4. `docker-compose exec app php composer.phar install`   
 5. `docker-compose exec app bin/console doctrine:migration:migrate --no-interaction`
-6. `docker-compose exec app bin/phpunit`
+6. `docker-compose exec app bin/phpunit --verbose`
 -------------------
 USAGE:
 Author:
