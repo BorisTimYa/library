@@ -1,4 +1,4 @@
-Description: https://github.com/BorisTimYa/liliya/blob/e7e89f62a300cf5cde20ac983341b26040441f13/tz.pdf
+Task description: https://github.com/BorisTimYa/liliya/blob/e7e89f62a300cf5cde20ac983341b26040441f13/tz.pdf
 
 1. `git clone https://github.com/BorisTimYa/liliya.git` 
 2. `docker-compose up --no-start`
