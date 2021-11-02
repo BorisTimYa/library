@@ -76,7 +76,7 @@ class BookControllerTest extends WebTestCase
     public function testSearchBookMultilingualEN(string $nameEn, string $nameRu): void
     {
         $client = static::createClient();
-        $client->request('SEARCH', '/en/book/search', [], [], [], $nameRu);
+        $client->request('SEARCH', '/en/book/search', [], [], [], $nameEn);
         $this->assertResponseIsSuccessful();
         $response = json_decode($client->getResponse()->getContent());
         $this->assertIsArray($response);
